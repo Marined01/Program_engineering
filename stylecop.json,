@@ -1,0 +1,19 @@
+{
+  "settings": {
+    "documentationRules": {
+      "companyName": "BarBreak",
+      "xmlHeader": false,
+      "fileNamingConvention": "metadata",
+      "documentationHeader": false
+    },
+    "analyzerSettings": {
+      "rules": {
+        "SA1633": false,  // ��������� ��������� �����
+        "SA1600": false,  // ��������� ������������ ��� �������� ����
+        "SA1200": false,  // ��������� ������ ��������� using �������� namespace
+        "SA1208": false,  // ��������� ���������� using � System �� �������
+        "SA1516": false   // ��������� ������ ��� ���� ����� �� ����������
+      }
+    }
+  }
+}
