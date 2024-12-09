@@ -23,5 +23,10 @@ namespace BarBreak.Presentation
         {
             InitializeComponent();
         }
+        private void LoginClick(object sender, RoutedEventArgs e)
+        {
+            string login = loginTextBox.Text;
+            string pass = passTextBox.Text;
+        }
     }
 }
