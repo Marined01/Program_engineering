@@ -3,14 +3,14 @@ using System;
 
 namespace BarBreak.Application.UseCases
 {
-    public class DeleteCourseUseCase
+    public interface ICourseRepository
     {
-        private readonly ICourseRepository _repository;
+        void Delete(string courseName);
+    }
 
-        public DeleteCourseUseCase(ICourseRepository repository)
-        {
-            _repository = repository;
-        }
+    public class DeleteCourseUseCase(ICourseRepository repository)
+    {
+        private readonly ICourseRepository repository = repository;
 
         public void Execute(string courseName)
         {
@@ -19,7 +19,7 @@ namespace BarBreak.Application.UseCases
                 throw new ArgumentException("Course name cannot be empty.");
             }
 
-            _repository.Delete(courseName);
+            repository.Delete(courseName);
         }
     }
 }

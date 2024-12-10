@@ -19,17 +19,25 @@ namespace BarBreak.Application.UseCases
         public void Execute(string courseName, string description, string content)
         {
             if (string.IsNullOrWhiteSpace(courseName))
+            {
                 throw new ArgumentException("Course name cannot be empty.");
+            }
+
             if (string.IsNullOrWhiteSpace(description))
+            {
                 throw new ArgumentException("Description cannot be empty.");
+            }
+
             if (string.IsNullOrWhiteSpace(content))
+            {
                 throw new ArgumentException("Content cannot be empty.");
+            }
 
-            CourseName = courseName;
-            Description = description;
-            Content = content;
+            this.CourseName = courseName;
+            this.Description = description;
+            this.Content = content;
 
-            //_repository.Save(courseName, description, content);
+            // _repository.Save(courseName, description, content);
         }
     }
 }
