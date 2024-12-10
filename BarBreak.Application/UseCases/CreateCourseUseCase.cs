@@ -5,16 +5,9 @@ namespace BarBreak.Application.UseCases
 {
     public class CreateCourseUseCase
     {
-        private readonly ICourseRepository _repository;
-
         public string CourseName { get; private set; }
         public string Description { get; private set; }
         public string Content { get; private set; }
-
-        public CreateCourseUseCase(ICourseRepository repository)
-        {
-            _repository = repository;
-        }
 
         public void Execute(string courseName, string description, string content)
         {

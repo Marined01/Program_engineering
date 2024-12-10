@@ -1,33 +1,48 @@
 using System;
 using System.Collections.Generic;
 
-namespace BarBreak.Core.Repositories;
+namespace BarBreak.Core.Repositories
 {
+    public interface IUserChoiceRepository
+    {
+        void AddChoice(string userId, string courseName);
+        void RemoveChoice(string userId);
+        string GetChoice(string userId);
+    }
+
     public class UserChoiceRepository : IUserChoiceRepository
     {
-        private readonly Dictionary<string, string> _userChoices = new Dictionary<string, string>();
+        // Наприклад, використаємо просте сховище (можна замінити на реальну базу даних)
+        private readonly Dictionary<string, string> _userChoices = [];
 
-        public void UpdateChoice(string username, string newCourseName)
+        public void AddChoice(string userId, string courseName)
         {
-            if (_userChoices.ContainsKey(username))
+            if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(courseName))
             {
-                Console.WriteLine($"User '{username}' is switching from '{_userChoices[username]}' to '{newCourseName}'.");
-                _userChoices[username] = newCourseName;
+                throw new ArgumentException("User ID and course name cannot be empty.");
             }
-            else
-            {
-                Console.WriteLine($"User '{username}' is enrolling in the course '{newCourseName}' for the first time.");
-                _userChoices.Add(username, newCourseName);
-            }
+
+            _userChoices[userId] = courseName;
         }
 
-        public string GetUserChoice(string username)
+        public void RemoveChoice(string userId)
         {
-            if (_userChoices.TryGetValue(username, out var courseName))
+            if (!_userChoices.ContainsKey(userId))
             {
-                return courseName;
+                throw new KeyNotFoundException("User choice not found.");
             }
-            throw new ArgumentException($"User '{username}' does not exist.");
+
+            _userChoices.Remove(userId);
+        }
+
+        public string GetChoice(string userId)
+        {
+            if (!_userChoices.TryGetValue(userId, out string? value))
+            {
+                throw new KeyNotFoundException("User choice not found.");
+            }
+
+            return value;
         }
     }
 }
