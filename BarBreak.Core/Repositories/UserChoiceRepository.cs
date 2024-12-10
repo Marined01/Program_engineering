@@ -12,7 +12,6 @@ namespace BarBreak.Core.Repositories
 
     public class UserChoiceRepository : IUserChoiceRepository
     {
-        // Наприклад, використаємо просте сховище (можна замінити на реальну базу даних)
         private readonly Dictionary<string, string> _userChoices = [];
 
         public void AddChoice(string userId, string courseName)
