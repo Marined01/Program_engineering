@@ -19,8 +19,8 @@ public interface IUserService
 
     Task DeleteUser(int id);
 
+
     SignUpResponseDto SignUpGuest(SignUpRequestDto request);
-   
 }
 
 public class UserService : IUserService
@@ -199,4 +199,5 @@ public class UserService : IUserService
             throw;
         }
     }
+
 }

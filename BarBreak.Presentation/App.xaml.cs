@@ -1,16 +1,22 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Events;
+using BarBreak.Infrastructure; // Додайте простір імен для вашого сервісу
+using Microsoft.EntityFrameworkCore;
+
 
 namespace BarBreak.Presentation
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : System.Windows.Application
     {
+        // Додайте поле для DI контейнера
+        private static IServiceProvider _serviceProvider;
+
         protected override void OnStartup(StartupEventArgs e)
         {
+            // Налаштування логування
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
@@ -21,7 +27,26 @@ namespace BarBreak.Presentation
 
             try
             {
+                // Налаштування DI контейнера
+                var serviceCollection = new ServiceCollection();
+
+                // Реєстрація контексту бази даних
+                serviceCollection.AddDbContext<ApplicationDbContext>(options =>
+                    options.UseNpgsql("Host=localhost;Port=5432;Database=BarBreakDb;Username=postgres;Password=your_password"));
+
+                // Реєстрація сервісу для тестування бази даних
+                serviceCollection.AddScoped<DatabaseTesterService>();
+
+                // Побудова контейнера
+                _serviceProvider = serviceCollection.BuildServiceProvider();
+
+                // Виклик методу для перевірки підключення до бази даних
+                var databaseTester = _serviceProvider.GetRequiredService<DatabaseTesterService>();
+                databaseTester.TestConnectionAsync().GetAwaiter().GetResult();
+
+                // Інформація для логування
                 Log.Information("Application Starting Up");
+
                 base.OnStartup(e);
             }
             catch (Exception ex)
