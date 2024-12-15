@@ -9,17 +9,26 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<RoleEntity> Roles { get; set; }
 
-    /// Connection configuration
+    // Конструктор для DI контейнера
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        : base(options)
+    {
+    }
+
     /// <inheritdoc/>
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
-        if (string.IsNullOrEmpty(connectionString))
+        // Виконуйте цю конфігурацію лише для сценаріїв, коли контекст використовується без DI
+        if (!optionsBuilder.IsConfigured)
         {
-            throw new InvalidOperationException("DB_CONNECTION_STRING environment variable is not set.");
-        }
+            var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new InvalidOperationException("DB_CONNECTION_STRING environment variable is not set.");
+            }
 
-        optionsBuilder.UseNpgsql(connectionString);
+            optionsBuilder.UseNpgsql(connectionString);
+        }
     }
 
     // Model configuration
