@@ -1,24 +1,14 @@
 ﻿using BarBreak.Core.DTOs;
 using BarBreak.Core.User;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using BarBreak.Infrastructure; 
+using BarBreak.Core.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace BarBreak.Presentation
 {
-    /// <summary>
-    /// Interaction logic for RegisterGuestWindow.xaml
-    /// </summary>
     public partial class RegisterGuestWindow : Window
     {
         private readonly IUserService _userService;
@@ -45,12 +35,39 @@ namespace BarBreak.Presentation
                 !acceptTerms)
             {
                 MessageBox.Show("Please fill in all fields and accept the terms.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
-            else
+
+            try
             {
-                // Логіка реєстрації користувача
+                
+                var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+                optionsBuilder.UseNpgsql("Host=localhost;Database=BarBreak;Username=postgres;Password=1909;");
+
+                var newUser = new UserEntity
+                {
+                    Email = email,
+                    Username = username,
+                    Password = password, 
+                    FirstName = firstName,
+                    LastName = lastName,
+                    RegistrationDate = DateTime.Now
+                };
+
+                // Створення контексту та збереження даних
+                using (var context = new ApplicationDbContext(optionsBuilder.Options))
+                {
+                    context.Users.Add(newUser);
+                    context.SaveChanges();
+                }
+
                 MessageBox.Show("Registration successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error saving data: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
+
     }
 }

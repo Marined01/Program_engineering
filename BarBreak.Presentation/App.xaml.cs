@@ -32,7 +32,7 @@ namespace BarBreak.Presentation
 
                 // Реєстрація контексту бази даних
                 serviceCollection.AddDbContext<ApplicationDbContext>(options =>
-                    options.UseNpgsql("Host=localhost;Port=5432;Database=BarBreakDb;Username=postgres;Password=your_password"));
+                    options.UseNpgsql("Host=localhost;Port=5432;Database=BarBreakDb;Username=postgres;Password=1909"));
 
                 // Реєстрація сервісу для тестування бази даних
                 serviceCollection.AddScoped<DatabaseTesterService>();
