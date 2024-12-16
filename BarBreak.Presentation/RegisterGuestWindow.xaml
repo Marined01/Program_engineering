@@ -9,6 +9,7 @@
     <Grid>
         <StackPanel Margin="10">
             <TextBlock Text="Create your account" FontSize="20" FontWeight="Bold" Margin="0,20,0,10" HorizontalAlignment="Center" />
+
             <TextBlock Text="Email" Width="440" />
             <TextBox x:Name="EmailTextBox" Width="440" Height="30" />
 
@@ -17,6 +18,10 @@
 
             <TextBlock Text="Password" Margin="0,10,0,0" Width="440" />
             <PasswordBox x:Name="PasswordBox" Width="440" Height="30" />
+
+            <!-- Secret Word Section -->
+            <TextBlock Text="Secret Word" Margin="0,10,0,0" Width="440" />
+            <TextBox x:Name="SecretWordTextBox" Width="440" Height="30" />
 
             <TextBlock Text="First Name" Margin="0,10,0,0" Width="440" />
             <TextBox x:Name="FirstNameTextBox" Width="440" Height="30" />
@@ -31,9 +36,10 @@
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Width="195">
                 <TextBlock Text="Already have an account? " />
                 <TextBlock>
-        <Hyperlink NavigateUri="LoginPage.xaml">Login here.</Hyperlink>
+                    <Hyperlink NavigateUri="LoginPage.xaml">Login here.</Hyperlink>
                 </TextBlock>
             </StackPanel>
         </StackPanel>
     </Grid>
 </Window>
+

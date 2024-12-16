@@ -1,32 +1,20 @@
 ﻿using BarBreak.Core.DTOs;
-using BarBreak.Core.User;
+using BarBreak.Core.Services;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace BarBreak.Presentation
 {
-    /// <summary>
-    /// Interaction logic for RegisterGuestWindow.xaml
-    /// </summary>
     public partial class RegisterGuestWindow : Window
     {
-        private readonly IUserService _userService;
+        private readonly DatabaseService _databaseService;
+
         public RegisterGuestWindow()
         {
             InitializeComponent();
-            //_userService = userService;
+            _databaseService = new DatabaseService(@"Data Source=C:\Git\Program_engineering\BarBreak.Presentation\Database\BarBreak.db"); // Оновлений шлях
         }
+
         private void RegisterButton_Click(object sender, RoutedEventArgs e)
         {
             string email = EmailTextBox.Text;
@@ -34,6 +22,7 @@ namespace BarBreak.Presentation
             string password = PasswordBox.Password;
             string firstName = FirstNameTextBox.Text;
             string lastName = LastNameTextBox.Text;
+            string secretWord = SecretWordTextBox.Text; // Додане поле
             bool acceptTerms = AcceptTermsCheckBox.IsChecked ?? false;
 
             // Валідація введених даних
@@ -42,14 +31,41 @@ namespace BarBreak.Presentation
                 string.IsNullOrWhiteSpace(password) ||
                 string.IsNullOrWhiteSpace(firstName) ||
                 string.IsNullOrWhiteSpace(lastName) ||
+                string.IsNullOrWhiteSpace(secretWord) || // Додана перевірка
                 !acceptTerms)
             {
                 MessageBox.Show("Please fill in all fields and accept the terms.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
-            else
+
+            // Перевірка наявності електронної пошти в базі даних
+            if (_databaseService.IsEmailTaken(email))
             {
-                // Логіка реєстрації користувача
+                MessageBox.Show("Email is already taken.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            // Створення об'єкта користувача
+            var user = new UserDTO
+            {
+                Email = email,
+                Username = username,
+                Password = password,
+                FirstName = firstName,
+                LastName = lastName,
+                SecretWord = secretWord // Додаємо секретне слово
+            };
+
+            // Збереження користувача в базу даних
+            try
+            {
+                _databaseService.SaveUser(user);
                 MessageBox.Show("Registration successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                this.Close(); // Закриваємо вікно після успішної реєстрації
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred while saving the user: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

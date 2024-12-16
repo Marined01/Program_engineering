@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.0" />
     <PackageReference Include="Roslynator.Analyzers" Version="4.12.9">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -29,6 +30,10 @@
     <ProjectReference Include="..\BarBreak.Application\BarBreak.Application.csproj" />
     <ProjectReference Include="..\BarBreak.Core\BarBreak.Core.csproj" />
     <ProjectReference Include="..\BarBreak.Infrastructure\BarBreak.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Database\" />
   </ItemGroup>
 
 </Project>
